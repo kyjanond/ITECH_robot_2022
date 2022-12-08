@@ -81,5 +81,28 @@ void SetAndExecute(){
             Serial.println(dxl.getLastLibErrCode());
         }
     }
-    
+}
+
+String GetRobotInfo(){
+    uint8_t recv_cnt = dxl.syncRead(&sr_infos);
+    String info_total = "";
+    if (recv_cnt>1){
+        String info_left = "";
+        String info_right = "";
+        for (uint8_t i = 0; i < recv_cnt; i++)
+        {
+            if(sr_infos.p_xels[i].id == DXL_ID_LEFT){
+                info_left.concat(String(sr_data[i].present_position));
+                info_left.concat(";");
+                info_left.concat(String(sr_infos.p_xels[i].error));
+            }
+            else if(sr_infos.p_xels[i].id == DXL_ID_RIGHT){
+                info_right.concat(String(sr_data[i].present_position));
+                info_right.concat(";");
+                info_right.concat(String(sr_infos.p_xels[i].error));
+            }
+        }
+        info_total = info_left + ";" + info_right;
+    }
+    return info_total;
 }

@@ -8,9 +8,11 @@
 
 const char BROKER_ADDR[] = "broker.hivemq.com";
 const char SUB_TOPIC[] = "ITECH_COM_WS/robot/cmd";
+const char PUB_TOPIC[] = "ITECH_COM_WS/robot/status";
 
 WiFiClient wifi;
 MQTTClient client;
+uint64_t lastMillis = 0;
 
 void onMessage(String &topic, String &payload){
     Serial.println(
@@ -94,4 +96,9 @@ void loop() {
         connect();
     }
     SetAndExecute();
+    if (millis() - lastMillis > 1000){
+        String robot_info = GetRobotInfo();
+        client.publish(PUB_TOPIC,robot_info);
+        lastMillis = millis();
+    }
 }

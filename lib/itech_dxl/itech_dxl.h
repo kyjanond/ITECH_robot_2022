@@ -38,5 +38,6 @@ typedef struct sw_data{
 void SetupDxl();
 void SetNewTarget(int32_t target_left, int32_t target_right);
 void SetAndExecute();
+String GetRobotInfo();
 
 #endif
